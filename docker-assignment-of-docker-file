@@ -1,0 +1,36 @@
+STEP--1st
+I've first wrote  the below script in a Dockerfile 
+
+
+FROM ubuntu:18.04
+RUN apt-get update -y && apt-get install openjdk-8-jdk -y && apt-get install git -y && apt-get install maven -y && apt-get install wget -y && apt-get install unzip -y
+WORKDIR /tmp
+RUN git clone https://github.com/kishor-bg/game-of-life.git
+WORKDIR /tmp/game-of-life
+RUN mvn install
+WORKDIR /tmp
+RUN mkdir servers
+WORKDIR /tmp/servers
+RUN wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.75/bin/apache-tomcat-9.0.75.zip && unzip apache-tomcat-9.0.75.zip
+RUN rm -rf apache-tomcat-9.0.75.zip &&  chmod -R a+rwx /tmp
+WORKDIR /tmp/servers/apache-tomcat-9.0.75/webapps
+RUN cp -r /tmp/game-of-life/gameoflife-web/target/gameoflife.war .
+WORKDIR /tmp/servers/apache-tomcat-9.0.75/bin
+RUN ./startup.sh
+EXPOSE 8080
+
+STEP-- 2nd 
+Then i've executed ""docker build -t test1:1 ."" command in /mnt
+
+STEP-- 3rd 
+Then executed ""docker run -itdp 8080:8080 --name work test1:1"" command
+
+Then attached to the container in ""/tmp/servers/apache.tomcat.9.0.74/bin""  and ran ""./startup.sh"" command to      start the tomcat server
+
+STEP-- 4th
+Then i've gone  browser and search for ""instance-ip:8080/gameoflife""
+
+Then the game of life app successfully ran over there.
+
+                        ++++ THANK YOU ++++
+                            +++++++++++
